@@ -3,6 +3,14 @@
 <head>
     <title>Snake Game v1</title>
     <style>
+        @font-face {
+            font-family: 'Game';
+            src: url('/font/World-of-spell.ttf');
+        }
+        @font-face {
+            font-family: 'end';
+            src: url('/font/OpenType/Jost-800-Heavy.otf');
+        }
         body {
             background-color: black;
             display: flex;
@@ -20,8 +28,9 @@
             margin-top: 500px;
             position: fixed;
             color: white;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-family: 'end';
             font-weight: 200;
+            font-size: 13px;
         }
 
         /* Estilos para el dialogo modal*/
@@ -45,6 +54,7 @@
             left: 50%;
             transform: translate(-50%,-50%);
             color: black;
+            font-family: 'game';
         }
         #finalScore{
             width: 100%;
@@ -59,7 +69,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-family: 'game';
         }
         #restartButton:hover {
             background-color: #45a049;
@@ -74,8 +84,9 @@
             color: #0f0;
             z-index: 1;
             text-align: end;
-            transform: translate(0%, -470%);
+            transform: translate(0%, -550%);
             font-size: 46px;
+            font-family: 'game';
         }
     </style>
 </head>
@@ -173,7 +184,7 @@
 
             //Dibuja la puntuacion en el lienzo
             ctx.fillStyle = "#000";
-            ctx.font = "20px Arial";
+            ctx.font = "20px game";
             ctx.fillText("Score: " + score, 10, 30);
 
             setTimeout(gameLoop, 150); // Adjust the speed of the game her
