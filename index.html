@@ -1,224 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Snake Game v1</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game - Inicio</title>
     <style>
         @font-face {
             font-family: 'Game';
             src: url('./font/World-of-spell.ttf');
         }
-        @font-face {
-            font-family: 'end';
-            src: url('./font/OpenType/Jost-800-Heavy.otf');
-        }
         body {
-            background-color: black;
+            background-image: url('./image/FondoInicio.jpg');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
-        }
-        canvas {
-            border: 2px solid yellow;
-            background-image: url('image/fondoSnake.jpg');
-            background-size: cover;
-        }
-        footer {
-            margin-top: 500px;
-            position: fixed;
-            color: white;
-            font-family: 'end';
-            font-weight: 200;
-            font-size: 13px;
-        }
-
-        /* Estilos para el dialogo modal*/
-        #modal{
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0, 0, 0.7);
-            text-align: center;
-            z-index: 1;
-        }
-        #modal-content {
-            background-color: white;
-            padding: 15px;
-            border-radius: 5px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50%);
             color: black;
-            font-family: 'game';
+            font-family: 'Game';
         }
-        #finalScore{
-            width: 100%;
-            height: 100%;
-            font-size: 30px;
+        h1 {
+            font-size: 70px;
         }
-        /*configuracion de boton*/
-        #restartButton {
+        button {
             padding: 10px 20px;
-            background-color: #4CAF50;
+            font-size: 24px;
+            margin-top: 20px;
+            background-color: #4caf50;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-family: 'game';
+            font-family: 'Game';
         }
-        #restartButton:hover {
+        button:hover {
             background-color: #45a049;
-        }
-        #restartButton:active {
-            background-color: #3e8e41;
-        }
-        /*titulo*/
-        #title{
-            /*background-color: #0f0;*/
-            position: fixed;
-            color: #0f0;
-            z-index: 1;
-            text-align: end;
-            transform: translate(0%, -565%);
-            font-size: 46px;
-            font-family: 'game';
         }
     </style>
 </head>
 <body>
-    <h1 id="title">Snake Game</h1>
-    <canvas id="snakeCanvas" width="400" height="400"></canvas>
-    <div id="modal">
-        <div id="modal-content" >
-            <h1>¡Game Over!</h1>
-            <p>Your Score <br>
-                <span id="finalScore"> 0 </span></p>
-            <button id="restartButton">Reset Game</button>
-        </div>
-    </div>
-    <footer>
-        <p>Desarrollado por Nil Medina - 2023 ©</p>
-    </footer>
-    <script>
-        const canvas = document.getElementById("snakeCanvas");
-        const ctx = canvas.getContext("2d");
-
-        const boxSize = 20;
-        let snake = [{ x: 10, y: 10 }];
-        let food = { x: 15, y: 15 };
-        let direction = "right";
-        let score = 0;
-        let gameOver = false;
-
-        function drawSnakePart(part) {
-            ctx.fillStyle = "#000";
-            ctx.fillRect(part.x * boxSize, part.y * boxSize, boxSize, boxSize);
-        }
-
-        function drawFood() {
-            ctx.fillStyle = "#f00";
-            ctx.fillRect(food.x * boxSize, food.y * boxSize, boxSize, boxSize);
-        }
-
-        function update() {
-            if (!gameOver) {
-                let newHead = { ...snake[0] };
-
-                switch (direction) {
-                    case "up":
-                        newHead.y -= 1;
-                        break;
-                    case "down":
-                        newHead.y += 1;
-                        break;
-                    case "left":
-                        newHead.x -= 1;
-                        break;
-                    case "right":
-                        newHead.x += 1;
-                        break;
-                }
-
-                snake.unshift(newHead);
-
-                if (newHead.x === food.x && newHead.y === food.y) {
-                    // Snake ate the food
-                    score += 10; // Incrementa la puntuacion
-                    food = { x: Math.floor(Math.random() * 20), y: Math.floor(Math.random() * 20) };
-                } else {
-                    snake.pop();
-                }
-            }
-        }
-
-        function checkCollisionWithWall() {
-            const head = snake[0];
-            if (head.x < 0 || head.x >= canvas.width / boxSize || head.y < 0 || head.y >= canvas.height / boxSize) {
-                // La cabeza de la serpiente choco con la pared, reiniciar el juego
-                gameOver = true;
-                snake = [{ x: 10, y: 10}];
-                direction = "right";
-                //score = 0;
-
-                //Muestra el mensaje de fin del juego y la puntuacion final
-                document.getElementById("finalScore").textContent = score;
-
-                document.getElementById("modal").style.display = "block";
-            }
-        }
-
-        function gameLoop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            checkCollisionWithWall(); // Verifica la colision con la pared
-
-            update();
-
-            snake.forEach(drawSnakePart);
-            drawFood();
-
-            //Dibuja la puntuacion en el lienzo
-            ctx.fillStyle = "#000";
-            ctx.font = "20px game";
-            ctx.fillText("Score: " + score, 10, 30);
-
-            setTimeout(gameLoop, 150); // Adjust the speed of the game her
-        }
-
-        document.addEventListener("keydown", (event) => {
-            switch (event.key) {
-                case "ArrowUp":
-                    if (direction !== "down") direction = "up";
-                    break;
-                case "ArrowDown":
-                    if (direction !== "up") direction = "down";
-                    break;
-                case "ArrowLeft":
-                    if (direction !== "right") direction = "left";
-                    break;
-                case "ArrowRight":
-                    if (direction !== "left") direction = "right";
-                    break;
-            }
-        });
-
-        document.getElementById("restartButton").addEventListener("click", () =>{
-            gameOver = false;
-            snake = [{x:10, y: 10}];
-            direction = "right";
-            score = 0;
-
-            document.getElementById("finalScore").textContent = score;
-
-            document.getElementById("modal").style.display = "none";
-        });
-
-        gameLoop();
-    </script>
+    <h1>SNAKE GAME</h1>
+    <button onclick="window.location.href='game.html'">START</button>
 </body>
 </html>
